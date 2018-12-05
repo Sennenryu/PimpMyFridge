@@ -1,4 +1,4 @@
-package Model;
+package model;
 
 import java.lang.*;
 
@@ -7,6 +7,9 @@ public class Point {
     private float temperatureExt;
     private float temperatureInt;
     private float humidite;
+    private float consigne;
+    private boolean rosee;
+    private double ptderosee;
 
 
     public float getTemperatureExt() {
@@ -23,11 +26,24 @@ public class Point {
         return humidite;
     }
 
+    public boolean getRosee(){
+        return rosee;
+    }
 
-    public Point(){
-        this.temperatureInt=0;
-        this.temperatureExt=0;
-        this.humidite=0;
+    public float getConsigne() {
+        return consigne;
+    }
+
+
+    public double getPtderosee() {
+        return ptderosee;
+    }
+
+
+    public double Magnus(float T,float RH){
+        double alpha =((17.27*T)/(237.7+T))+Math.log(RH/100);
+        double Tr = (237.7*alpha)/(17.27-alpha);
+        return Tr ;
     }
 
     public void SavePoint(String data){
@@ -43,8 +59,17 @@ public class Point {
                 case 2:
                     this.humidite = Float.parseFloat(value);
                     break;
+                case 3:
+                    this.consigne = Float.parseFloat(value);
             }
             i++;
         }
+        if (Magnus(this.temperatureInt, this.humidite)>this.temperatureInt) {
+            this.rosee = true;
+        }
+        else {
+            this.rosee = false;
+        }
+        this.ptderosee = Magnus(this.temperatureInt, this.humidite);
     }
 }
